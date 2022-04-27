@@ -25,6 +25,10 @@ app.post('/courses/id', (req, res) => {
     ]) 
 })
 
+//CONFIGURAÇÃO DO PROJETO
+
+const insommine = 'insomine'
+
 
 //PUT Alterar uma informação no servidor
 app.put('/courses/id', (req, res) => {
