@@ -1,0 +1,4 @@
+
+
+/*CONECTANDO O BANDO DE DADOS*- GERENCIAMENTO DE BANDO DE DADOS*/
+### yarn add sequelize --save 

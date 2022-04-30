@@ -2,11 +2,13 @@ const express = require('express');
 const app = express()
 const path = require('path')
 
+const db = require('../database/db')
+
+//Conectando com o banco de dados
 const alunos = []
 
-
 //Buscar uma informação dentro do servidor
-app.get('/curses', (req, res) => {
+app.get('/curses', async (req, res) => {
     return res.json([
         "Curse 01",
         "Curse 02",
@@ -15,51 +17,12 @@ app.get('/curses', (req, res) => {
 })
 
 //Inserir uma informação no servidor 
-app.post('/courses/id', (req, res) => {
+app.post('/cadastrar', async (req, res) => {
     return res.json([
-        "Curse 01",
-        "Curse 02",
-        "Curse 03",
-        "Curse 04"
-        
-    ]) 
-})
-
-//CONFIGURAÇÃO DO PROJETO
-
-const insommine = 'insomine'
-
-
-//PUT Alterar uma informação no servidor
-app.put('/courses/id', (req, res) => {
-    return res.json([
-        "Curse 1",
-        "Curse 2",
-        "Curse 3",
-        "Curse 4"
+        name = "cadastrar",
+        age =  26,
     ])
 })
-
-//PATCH Alterar uma informação especifíca 
-
-app.path('/courses/id', (req, res) => {
-    return res.json([
-        "Curse 11",
-        "Curse 2",
-        "Curse 3",
-        "Curse 4"
-    ])
-} )
-
-// DELETE Deletar uma inforamação no servidor
-
-app.delete('/courses/id', (req, res ) => {
-    return res.json([
-        "Curse 11",
-        "Curse 2",
-        "Curse 3"
-    ])
+app.listen(3333, () => {
+    console.log("Server started")
 })
-
-
-app.listen(3333)
