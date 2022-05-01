@@ -23,6 +23,7 @@ app.post('/cadastrar', async (req, res) => {
         age =  26,
     ])
 })
+
 app.listen(3333, () => {
     console.log("Server started")
 })
