@@ -4,11 +4,35 @@ const path = require('path')
 const db = require('../database/db')
 const User = require('../database/User')
 
-
 app.use(express.json())
 
+/* 
+    * GET - Buscar uma informação dentro do Servidor
+    * POST - Inserir uma informação no Servidor
+    * PUT - Alterar uma informação do Servidor
+    * PATCH - Alterar uma informação especifica
+    * DELETE - Deletar uma informação no Servidor
+
+    * Tipos de parâmetros 
+    
+    - Route Params => Indentificar um recurso editar/deletar/buscar
+    - Query Params => Paginação Filtro
+    - Body Parms => Os objetos inserção/alteração /(JSON)
+*/
+
+
 //Buscar uma informação dentro do servidor
-app.get('/curses', async (req, res) => {
+app.get('/courses', async (req, res) => {
+    return res.json([
+        "Curse 01",
+        "Curse 02",
+        "Curse 03"
+    ]) 
+})
+
+app.post('/courses', (req, res) => {
+    const body = request.body;
+    console.log(body)
     return res.json([
         "Curse 01",
         "Curse 02",
@@ -17,25 +41,12 @@ app.get('/curses', async (req, res) => {
 })
 
 //Inserir uma informação no servidor 
-app.post('/cadastrar', async (req, res) => {
-    console.log(req.body)
 
-    await User.create(req.body)
-    .then(() => {
-        return res.json({
-            erro: false,
-            mansagem: "Usuário cadastrado com sucesso!"
-        })
-    }).catch(() => {
-        return res.status(400).json({
-            erro: true,
-            mansagem: "Usuário não cadastrado com sucesso!"
-        })
-    });
 
-    //res.send('Pagina cadastrar')
+
+app.put('/courses/:id', async (req, res) => {
+    const params = request.params
 })
-
 
 app.listen(3333, () => {
     console.log("Server started")
