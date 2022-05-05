@@ -9,15 +9,17 @@ const customers = [];
 
 
 //Middlewares
-function verifyExistsAccountCPF(req, res, next) {
-   const { cpf } = request.params;
+function verifyExistsAccountCPF(request, response, next) {
+   const { cpf } = request.headers;
 
-  customer = customers.find((customer) => customer.cpf === cpf)
+   const customer = customers.find(customer => customer.cpf === cpf)
 
-  if(!customer) {
-   return response.status(400).joson({error:"Customer not found"})
-}
-   return next()
+   if(!customer) 
+   return response.status(400).joson({ error:"Customer not found"});
+
+   request.customer = customer;
+   
+   return next();
 }
 
 //Criando uma conta com um único cpf
@@ -43,10 +45,31 @@ app.post('/account', (request, response) => {
 });
 
 //Consultar extrato
-app.get('/statement/:cpf', verifyExistsAccountCPF, (request, response) => {
-  return response.status(200).json(customer.statement);
+app.get("/statement", verifyExistsAccountCPF, (request, response) => {
+   const { customer } = request;
+   return response.json(customer.statement);
 });
 
+//Realizar um depósito
+app.post('/deposit', verifyExistsAccountCPF, (request, response) => {
+   const { description, amount } = request.body;
+   const { customer } = request;
+   const statementOperation = {
+     description,
+     amount,
+     created_at: new Date(),
+     type: 'credit'
+   };
+ 
+   customer.statement.push(statementOperation);
+ 
+   return response.status(201).send();
+ });
+
+
+
+//Sobre os Middlewares: quando se faz necessário usar em outras rotas
+// é legal usar ele "app.use(verifyExistsAccountCPF)"
 
 
 
