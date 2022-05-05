@@ -1,12 +1,15 @@
 const express = require('express');
 const { v4: uuidv4 } = require('uuid');
-
 const app = express();
 
 app.use(express.json());
 
 const customers = [];
 
+
+
+//Sobre os Middlewares: quando se faz necessário usar em outras rotas
+// é legal usar ele "app.use(verifyExistsAccountCPF)"
 
 //Middlewares
 function verifyExistsAccountCPF(request, response, next) {
@@ -20,6 +23,18 @@ function verifyExistsAccountCPF(request, response, next) {
    request.customer = customer;
    
    return next();
+}
+
+//Bançacete 
+function getBalance(statement) {
+  const balance = statement.reduce((acc, operation) => {
+    if (operation.type === 'credit') {
+      return acc + operation.amount;
+    }else {
+      return acc - operation.amount
+    }
+  }, 0)
+  return balance;
 }
 
 //Criando uma conta com um único cpf
@@ -66,10 +81,26 @@ app.post('/deposit', verifyExistsAccountCPF, (request, response) => {
    return response.status(201).send();
  });
 
+//Realizar um saque
+app.post('/withdraw', verifyExistsAccountCPF, (request, response) => {
+  const {amount} = request.body;
+  const {customer} = request;
 
+  const balance = getBalance(customer.statement)
 
-//Sobre os Middlewares: quando se faz necessário usar em outras rotas
-// é legal usar ele "app.use(verifyExistsAccountCPF)"
+  if(balance < amount) {
+    return response.status(400).json({error:"Insufficient funds!"})
+  }
+  const statementOperation = {
+    amount,
+    created_at: new Date(),
+    type: 'debit'
+  };
+
+  customer.statement.push(statementOperation)
+
+  return response.status(200).send()
+})
 
 
 
